@@ -1,0 +1,28 @@
+{
+  "name": "evolutive/evo_linkmanager",
+  "description": "Manages various links like Contact, FAQ and custom links",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Evolutive",
+      "email": "contact@evolutive.fr"
+    }
+  ],
+  "require": {
+    "php": ">=8.0.0",
+    "monolog/monolog": "^3.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "Evolutive\\Module\\EvoLinkManager\\": "src/"
+    },
+    "classmap": [
+      "evo_linkmanager.php"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist",
+    "prepend-autoloader": false
+  },
+  "type": "prestashop-module"
+}

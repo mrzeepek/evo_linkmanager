@@ -1,0 +1,179 @@
+services:
+  _defaults:
+    public: false
+    autowire: true
+    autoconfigure: true
+
+  # Repositories
+  evolutive.evo_linkmanager.repository.link_repository:
+    class: Evolutive\Module\EvoLinkManager\Repository\LinkRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+      - '@evolutive.evo_linkmanager.service.log_service'
+    public: true
+
+  evolutive.evo_linkmanager.repository.placement_repository:
+    class: Evolutive\Module\EvoLinkManager\Repository\PlacementRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+      - '@evolutive.evo_linkmanager.service.log_service'
+    public: true
+
+  # Services
+  evolutive.evo_linkmanager.service.cms_service:
+    class: Evolutive\Module\EvoLinkManager\Service\CMSService
+    public: true
+
+  evolutive.evo_linkmanager.service.log_service:
+    class: Evolutive\Module\EvoLinkManager\Service\LogService
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+    public: true
+
+  # Service alias
+  Evolutive\Module\EvoLinkManager\Service\CMSService:
+    alias: evolutive.evo_linkmanager.service.cms_service
+    public: false
+
+  # Form types
+  evolutive.evo_linkmanager.form.link_type:
+    class: Evolutive\Module\EvoLinkManager\Form\LinkType
+    arguments:
+      - '@evolutive.evo_linkmanager.service.cms_service'
+      - '@evolutive.evo_linkmanager.repository.placement_repository'
+    tags:
+      - { name: 'form.type' }
+
+  # Link form handler
+  evolutive.evo_linkmanager.form.link_form_data_provider:
+    class: Evolutive\Module\EvoLinkManager\Form\LinkFormDataProvider
+    arguments:
+      - '@evolutive.evo_linkmanager.repository.link_repository'
+      - '@evolutive.evo_linkmanager.service.cms_service'
+      - '@evolutive.evo_linkmanager.repository.placement_repository'
+    public: true
+
+  evolutive.evo_linkmanager.form.link_form_handler:
+    class: Evolutive\Module\EvoLinkManager\Form\LinkFormHandler
+    arguments:
+      - '@form.factory'
+      - '@evolutive.evo_linkmanager.form.link_form_data_provider'
+      - '@translator'
+    public: true
+
+  # Grid services for Links
+  evolutive.evo_linkmanager.grid.definition.factory.link:
+    class: Evolutive\Module\EvoLinkManager\Grid\Definition\Factory\LinkGridDefinitionFactory
+    parent: prestashop.core.grid.definition.factory.abstract_grid_definition
+    public: true
+    arguments:
+      - '@prestashop.core.hook.dispatcher'
+      - '@translator'
+    autowire: false
+    autoconfigure: false
+
+  evolutive.evo_linkmanager.grid.query_builder.link:
+    class: Evolutive\Module\EvoLinkManager\Grid\Query\LinkQueryBuilder
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  evolutive.evo_linkmanager.grid.query_builder.log:
+    class: Evolutive\Module\EvoLinkManager\Grid\Query\LogQueryBuilder
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  evolutive.evo_linkmanager.grid.factory.link:
+    class: PrestaShop\PrestaShop\Core\Grid\GridFactory
+    arguments:
+      - '@evolutive.evo_linkmanager.grid.definition.factory.link'
+      - '@evolutive.evo_linkmanager.grid.data_provider.link'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+    public: true
+
+  evolutive.evo_linkmanager.grid.data_provider.link:
+    class: PrestaShop\PrestaShop\Core\Grid\Data\Factory\DoctrineGridDataFactory
+    arguments:
+      - '@evolutive.evo_linkmanager.grid.query_builder.link'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'link'
+
+  evolutive.evo_linkmanager.grid.definition.factory.log:
+    class: Evolutive\Module\EvoLinkManager\Grid\Definition\Factory\LogGridDefinitionFactory
+    parent: prestashop.core.grid.definition.factory.abstract_grid_definition
+    public: true
+    arguments:
+      - '@prestashop.core.hook.dispatcher'
+      - '@translator'
+    autowire: false
+    autoconfigure: false
+
+  evolutive.evo_linkmanager.grid.factory.log:
+    class: PrestaShop\PrestaShop\Core\Grid\GridFactory
+    arguments:
+      - '@evolutive.evo_linkmanager.grid.definition.factory.log'
+      - '@evolutive.evo_linkmanager.grid.data_provider.log'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+    public: true
+
+  evolutive.evo_linkmanager.grid.data_provider.log:
+    class: PrestaShop\PrestaShop\Core\Grid\Data\Factory\DoctrineGridDataFactory
+    arguments:
+      - '@evolutive.evo_linkmanager.grid.query_builder.log'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'log'
+
+  # Controllers
+  Evolutive\Module\EvoLinkManager\Controller\Admin\ConfigurationController:
+    class: Evolutive\Module\EvoLinkManager\Controller\Admin\ConfigurationController
+    public: true
+    parent: PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController
+    autowire: true
+    autoconfigure: false
+    arguments:
+      $linkRepository: '@evolutive.evo_linkmanager.repository.link_repository'
+      $router: '@router'
+      $translator: '@translator'
+
+  Evolutive\Module\EvoLinkManager\Controller\Admin\LinkController:
+    class: Evolutive\Module\EvoLinkManager\Controller\Admin\LinkController
+    public: true
+    parent: PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController
+    autowire: true
+    autoconfigure: false
+    arguments:
+      $linkGridFactory: '@evolutive.evo_linkmanager.grid.factory.link'
+      $linkFormHandler: '@evolutive.evo_linkmanager.form.link_form_handler'
+      $linkRepository: '@evolutive.evo_linkmanager.repository.link_repository'
+      $logService: '@evolutive.evo_linkmanager.service.log_service'
+
+  Evolutive\Module\EvoLinkManager\Controller\Admin\LogController:
+    class: Evolutive\Module\EvoLinkManager\Controller\Admin\LogController
+    public: true
+    parent: PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController
+    autowire: true
+    autoconfigure: false
+    arguments:
+      $logGridFactory: '@evolutive.evo_linkmanager.grid.factory.log'
+      $logService: '@evolutive.evo_linkmanager.service.log_service'
+
+  # Controller aliases
+  evolutive.evo_linkmanager.controller.admin.configuration:
+    alias: Evolutive\Module\EvoLinkManager\Controller\Admin\ConfigurationController
+    public: true
+
+  evolutive.evo_linkmanager.controller.admin.link:
+    alias: Evolutive\Module\EvoLinkManager\Controller\Admin\LinkController
+    public: true
+
+  evolutive.evo_linkmanager.controller.admin.log:
+    alias: Evolutive\Module\EvoLinkManager\Controller\Admin\LogController
+    public: true

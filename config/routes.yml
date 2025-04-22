@@ -1,0 +1,107 @@
+# Configuration routes
+evo_linkmanager_configuration:
+  path: /evo-linkmanager/configuration
+  methods: [GET, POST]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\ConfigurationController::indexAction
+    _legacy_controller: AdminEvoLinkManagerConfiguration
+
+# Link routes
+evo_linkmanager_link_index:
+  path: /evo-linkmanager/link
+  methods: [GET, POST]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\LinkController::indexAction
+    _legacy_controller: AdminEvoLinkManagerLinks
+
+evo_linkmanager_link_create:
+  path: /evo-linkmanager/link/new
+  methods: [GET, POST]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\LinkController::createAction
+    _legacy_controller: AdminEvoLinkManagerLinks
+
+evo_linkmanager_link_edit:
+  path: /evo-linkmanager/link/{linkId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\LinkController::editAction
+    _legacy_controller: AdminEvoLinkManagerLinks
+  requirements:
+    linkId: \d+
+
+evo_linkmanager_link_delete:
+  path: /evo-linkmanager/link/{linkId}/delete
+  methods: [GET]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\LinkController::deleteAction
+    _legacy_controller: AdminEvoLinkManagerLinks
+  requirements:
+    linkId: \d+
+
+evo_linkmanager_link_toggle_active:
+  path: /evo-linkmanager/link/{linkId}/toggle-active
+  methods: [POST]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\LinkController::toggleActiveAction
+    _legacy_controller: AdminEvoLinkManagerLinks
+  requirements:
+    linkId: \d+
+
+# Placement routes
+evo_linkmanager_placement_index:
+  path: /evo-linkmanager/placement
+  methods: [GET]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\PlacementController::indexAction
+    _legacy_controller: AdminEvoLinkManagerPlacements
+
+evo_linkmanager_placement_create:
+  path: /evo-linkmanager/placement/new
+  methods: [GET, POST]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\PlacementController::createAction
+    _legacy_controller: AdminEvoLinkManagerPlacements
+
+evo_linkmanager_placement_edit:
+  path: /evo-linkmanager/placement/{placementId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\PlacementController::editAction
+    _legacy_controller: AdminEvoLinkManagerPlacements
+  requirements:
+    placementId: \d+
+
+evo_linkmanager_placement_delete:
+  path: /evo-linkmanager/placement/{placementId}/delete
+  methods: [POST, DELETE]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\PlacementController::deleteAction
+    _legacy_controller: AdminEvoLinkManagerPlacements
+  requirements:
+    placementId: \d+
+
+# Log routes
+# Log routes
+evo_linkmanager_log_index:
+  path: /evo-linkmanager/log
+  methods: [GET]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\LogController::indexAction
+    _legacy_controller: AdminEvoLinkManagerLogs
+
+evo_linkmanager_log_view:
+  path: /evo-linkmanager/log/{logId}/view
+  methods: [GET]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\LogController::viewAction
+    _legacy_controller: AdminEvoLinkManagerLogs
+  requirements:
+    logId: \d+
+
+evo_linkmanager_log_clear:
+  path: /evo-linkmanager/log/clear
+  methods: [GET]
+  defaults:
+    _controller: Evolutive\Module\EvoLinkManager\Controller\Admin\LogController::clearAction
+    _legacy_controller: AdminEvoLinkManagerLogs

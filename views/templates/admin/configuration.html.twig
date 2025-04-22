@@ -1,0 +1,190 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+  {% if form_vars is defined and form_vars is not empty %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-header-title">
+              {{ 'Link Manager Configuration'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+            </h3>
+          </div>
+          <div class="card-body">
+            {{ form_start(configurationForm) }}
+            <div class="form-wrapper">
+              {{ form_widget(configurationForm) }}
+            </div>
+
+            <div class="card-footer">
+              <div class="d-flex justify-content-between">
+                <a href="{{ path('admin_module_manage') }}" class="btn btn-outline-secondary">
+                  {{ 'Cancel'|trans({}, 'Admin.Actions') }}
+                </a>
+                <button class="btn btn-primary" type="submit">{{ 'Save'|trans({}, 'Admin.Actions') }}</button>
+              </div>
+            </div>
+            {{ form_end(configurationForm) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-header-title">
+            {{ 'Manage Links'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+          </h3>
+        </div>
+        <div class="card-body">
+          <p>{{ 'You can manage your links from the dedicated page:'|trans({}, 'Modules.Evolinkmanager.Admin') }}</p>
+
+          <a href="{{ path('evo_linkmanager_link_index') }}" class="btn btn-primary">
+            <i class="material-icons">link</i>
+            {{ 'Manage Links'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+          </a>
+
+          {% if links is not empty %}
+            <div class="table-responsive mt-4">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>{{ 'ID'|trans({}, 'Admin.Global') }}</th>
+                  <th>{{ 'Name'|trans({}, 'Admin.Global') }}</th>
+                  <th>{{ 'Type'|trans({}, 'Admin.Global') }}</th>
+                  <th>{{ 'URL'|trans({}, 'Admin.Global') }}</th>
+                  <th>{{ 'Placement Identifier'|trans({}, 'Modules.Evolinkmanager.Admin') }}</th>
+                  <th>{{ 'Position'|trans({}, 'Admin.Global') }}</th>
+                  <th>{{ 'Status'|trans({}, 'Admin.Global') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for link in links %}
+                  <tr>
+                    <td>{{ link.id_link }}</td>
+                    <td>{{ link.name }}</td>
+                    <td>{{ link.link_type }}</td>
+                    <td>
+                      {% if link.link_type == 'cms' %}
+                        {{ 'CMS Page ID: ' ~ link.id_cms }}
+                      {% else %}
+                        {{ link.url|length > 50 ? link.url|slice(0, 50) ~ '...' : link.url }}
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if hasPlacement is defined and hasPlacement[link.id_link] is defined %}
+                        <code class="p-2 bg-light">{{ hasPlacement[link.id_link] }}</code>
+                      {% else %}
+                        <span class="badge badge-secondary">{{ 'No placement'|trans({}, 'Modules.Evolinkmanager.Admin') }}</span>
+                      {% endif %}
+                    </td>
+                    <td>{{ link.position }}</td>
+                    <td>
+                      {% if link.active %}
+                        <span class="badge badge-success">{{ 'Active'|trans({}, 'Admin.Global') }}</span>
+                      {% else %}
+                        <span class="badge badge-danger">{{ 'Inactive'|trans({}, 'Admin.Global') }}</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="card-header-title text-white">
+            <i class="material-icons">code</i>
+            {{ 'Using Link Identifiers in Your Templates'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info">
+            <p class="font-weight-bold mb-3">{{ 'To use a link in your .tpl templates, use one of the following Smarty functions:'|trans({}, 'Modules.Evolinkmanager.Admin') }}</p>
+
+            <div class="mb-3 p-3 bg-light">
+              <h5>{{ 'Recommended method:'|trans({}, 'Modules.Evolinkmanager.Admin') }}</h5>
+              <pre><code>{get_evo_link_by_placement identifier='placement_identifier'}</code></pre>
+            </div>
+
+            <p>{{ 'Replace "placement_identifier" with one of the identifiers from the table below.'|trans({}, 'Modules.Evolinkmanager.Admin') }}</p>
+          </div>
+
+          <div class="alert alert-warning">
+            {{ 'Make sure to clear the PrestaShop cache after adding new links or modifying existing ones.'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          <h3 class="card-header-title text-white">
+            <i class="material-icons">format_list_bulleted</i>
+            {{ 'Available Placement Identifiers'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+          </h3>
+        </div>
+        <div class="card-body">
+          <p class="font-weight-bold">{{ 'These are the placement identifiers you can use in your templates:'|trans({}, 'Modules.Evolinkmanager.Admin') }}</p>
+
+          <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+              <th style="width: 25%;">{{ 'Identifier'|trans({}, 'Modules.Evolinkmanager.Admin') }}</th>
+              <th style="width: 35%;">{{ 'Description'|trans({}, 'Admin.Global') }}</th>
+              <th style="width: 15%;">{{ 'Status'|trans({}, 'Admin.Global') }}</th>
+              <th style="width: 25%;">{{ 'Associated Link'|trans({}, 'Modules.Evolinkmanager.Admin') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if placements is defined and placements is not empty %}
+              {% for placement in placements %}
+                <tr>
+                  <td class="font-weight-bold">
+                    <code class="p-2 bg-light">{{ placement.identifier }}</code>
+                  </td>
+                  <td>{{ placement.description|default('No description') }}</td>
+                  <td>
+                    {% if placement.active %}
+                      <span class="badge badge-success">{{ 'Active'|trans({}, 'Admin.Global') }}</span>
+                    {% else %}
+                      <span class="badge badge-danger">{{ 'Inactive'|trans({}, 'Admin.Global') }}</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if placement.link_name is defined and placement.link_name %}
+                      <span class="badge badge-info">{{ placement.link_name }}</span>
+                    {% else %}
+                      <span class="badge badge-warning">{{ 'No link associated'|trans({}, 'Modules.Evolinkmanager.Admin') }}</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="4" class="text-center">
+                  {{ 'No placements found. Default placements should be available.'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+                </td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

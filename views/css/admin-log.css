@@ -1,0 +1,47 @@
+/* views/css/admin-logs.css */
+/**
+ * Log management CSS
+ *
+ * @author    Evolutive Group
+ * @copyright 2025 Evolutive Group
+ * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
+ */
+
+/* Grid customization */
+.grid-logs-severity-info {
+  color: #17a2b8;
+  font-weight: bold;
+}
+
+.grid-logs-severity-success {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.grid-logs-severity-warning {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.grid-logs-severity-error {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Log details specific styles */
+.log-details pre {
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.log-details .badge {
+  font-size: 90%;
+}
+
+/* Clear logs button styling */
+.logs-clear-button {
+  position: relative;
+  margin-left: 10px;
+}

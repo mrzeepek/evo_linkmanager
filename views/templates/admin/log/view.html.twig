@@ -1,0 +1,129 @@
+{# views/templates/admin/log/view.html.twig #}
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-header-title">
+          <i class="material-icons">visibility</i>
+          {{ 'Log Details'|trans({}, 'Modules.Evolinkmanager.Admin') }} #{{ log.id_log }}
+        </h3>
+      </div>
+
+      <div class="card-body">
+        {# views/templates/admin/log/view.html.twig (suite) #}
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <table class="table table-striped">
+              <tbody>
+              <tr>
+                <th>{{ 'ID'|trans({}, 'Admin.Global') }}</th>
+                <td>{{ log.id_log }}</td>
+              </tr>
+              <tr>
+                <th>{{ 'Date'|trans({}, 'Admin.Global') }}</th>
+                <td>{{ log.date_add }}</td>
+              </tr>
+              <tr>
+                <th>{{ 'Employee'|trans({}, 'Admin.Global') }}</th>
+                <td>{{ log.employee_name|default('System') }}</td>
+              </tr>
+              <tr>
+                <th>{{ 'Severity'|trans({}, 'Admin.Global') }}</th>
+                <td>
+                  {% if log.severity == 'info' %}
+                    <span class="badge badge-info">{{ 'Info'|trans({}, 'Admin.Global') }}</span>
+                  {% elseif log.severity == 'success' %}
+                    <span class="badge badge-success">{{ 'Success'|trans({}, 'Admin.Global') }}</span>
+                  {% elseif log.severity == 'warning' %}
+                    <span class="badge badge-warning">{{ 'Warning'|trans({}, 'Admin.Global') }}</span>
+                  {% elseif log.severity == 'error' %}
+                    <span class="badge badge-danger">{{ 'Error'|trans({}, 'Admin.Global') }}</span>
+                  {% else %}
+                    <span class="badge badge-secondary">{{ log.severity }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <table class="table table-striped">
+              <tbody>
+              <tr>
+                <th>{{ 'Action'|trans({}, 'Admin.Global') }}</th>
+                <td>
+                  {% if log.action == 'create' %}
+                    <span class="badge badge-success">{{ 'Create'|trans({}, 'Admin.Actions') }}</span>
+                  {% elseif log.action == 'update' %}
+                    <span class="badge badge-info">{{ 'Update'|trans({}, 'Admin.Actions') }}</span>
+                  {% elseif log.action == 'delete' %}
+                    <span class="badge badge-danger">{{ 'Delete'|trans({}, 'Admin.Actions') }}</span>
+                  {% elseif log.action == 'toggle' %}
+                    <span class="badge badge-secondary">{{ 'Toggle'|trans({}, 'Modules.Evolinkmanager.Admin') }}</span>
+                  {% elseif log.action == 'install' %}
+                    <span class="badge badge-primary">{{ 'Install'|trans({}, 'Admin.Actions') }}</span>
+                  {% elseif log.action == 'uninstall' %}
+                    <span class="badge badge-danger">{{ 'Uninstall'|trans({}, 'Admin.Actions') }}</span>
+                  {% elseif log.action == 'associate' %}
+                    <span class="badge badge-info">{{ 'Associate'|trans({}, 'Modules.Evolinkmanager.Admin') }}</span>
+                  {% elseif log.action == 'dissociate' %}
+                    <span class="badge badge-warning">{{ 'Dissociate'|trans({}, 'Modules.Evolinkmanager.Admin') }}</span>
+                  {% else %}
+                    <span class="badge badge-secondary">{{ log.action }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th>{{ 'Resource Type'|trans({}, 'Modules.Evolinkmanager.Admin') }}</th>
+                <td>
+                      <span class="badge badge-{{ log.resource_type == 'link' ? 'primary' : (log.resource_type == 'placement' ? 'success' : 'secondary') }}">
+                        {{ log.resource_type }}
+                      </span>
+                </td>
+              </tr>
+              <tr>
+                <th>{{ 'Resource ID'|trans({}, 'Modules.Evolinkmanager.Admin') }}</th>
+                <td>{{ log.resource_id|default('N/A') }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header">
+            {{ 'Message'|trans({}, 'Admin.Global') }}
+          </div>
+          <div class="card-body">
+            {{ log.message }}
+          </div>
+        </div>
+
+        {% if log.details %}
+          <div class="card">
+            <div class="card-header">
+              {{ 'Details'|trans({}, 'Admin.Global') }}
+            </div>
+            <div class="card-body">
+              {% if log.details_array is defined %}
+                <pre class="bg-light p-3">{{ log.details|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}</pre>
+              {% else %}
+                <pre class="bg-light p-3">{{ log.details }}</pre>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="card-footer">
+          <a href="{{ path('evo_linkmanager_log_index') }}" class="btn btn-outline-secondary">
+            <i class="material-icons">arrow_back</i> {{ 'Back to list'|trans({}, 'Admin.Actions') }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

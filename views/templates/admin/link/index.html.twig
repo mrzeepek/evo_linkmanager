@@ -1,0 +1,33 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <div class="alert alert-info">
+        {{ 'Links can be used in your templates using placement identifiers. You can add different types of links: custom URLs, contact page, or CMS pages.'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="float-right mb-2">
+        <a href="{{ path('evo_linkmanager_link_create') }}" class="btn btn-primary">
+          <i class="material-icons">add_circle_outline</i>
+          {{ 'Add new link'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      {% include '@PrestaShop/Admin/Common/Grid/grid_panel.html.twig' with {'grid': linkGrid} %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script src="{{ asset('themes/new-theme/public/link.bundle.js') }}"></script>
+{% endblock %}

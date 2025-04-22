@@ -1,0 +1,61 @@
+/**
+ * Link Manager Admin CSS
+ *
+ * @author    Evolutive Group
+ * @copyright 2025 Evolutive Group
+ * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
+ */
+
+/* General styling for the admin interface */
+.evo-linkmanager-title {
+  margin-bottom: 20px;
+}
+
+.evo-linkmanager-alert {
+  margin-bottom: 20px;
+}
+
+/* Link type indicators */
+.link-type-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.link-type-custom {
+  background-color: #e7f5ff;
+  color: #0077b6;
+}
+
+.link-type-contact {
+  background-color: #f0fff4;
+  color: #2f9e44;
+}
+
+.link-type-cms {
+  background-color: #fff3bf;
+  color: #e67700;
+}
+
+/* Form styling */
+.link-form-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.link-form-section:last-child {
+  border-bottom: none;
+}
+
+/* Table styling */
+.link-list-table th {
+  background-color: #f8f9fa;
+}
+
+.link-list-table .actions-column {
+  width: 150px;
+}

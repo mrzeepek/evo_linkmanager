@@ -1,0 +1,102 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <h3 class="card-header">
+          {% if app.request.get('_route') ends with 'create' %}
+            <i class="material-icons">add_circle_outline</i> {{ 'Add New Link'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+          {% else %}
+            <i class="material-icons">edit</i> {{ 'Edit Link'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+          {% endif %}
+        </h3>
+        <div class="card-body">
+          {{ form_start(linkForm) }}
+          <div class="form-wrapper">
+            <div class="form-group row">
+              <div class="col-md-12">
+                {{ form_row(linkForm.name) }}
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-12">
+                {{ form_row(linkForm.identifier) }}
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-12">
+                {{ form_row(linkForm.link_type) }}
+              </div>
+            </div>
+
+            <div class="form-group row" id="url-field">
+              <div class="col-md-12">
+                {{ form_row(linkForm.url) }}
+              </div>
+            </div>
+
+            <div class="form-group row" id="cms-field">
+              <div class="col-md-12">
+                {{ form_row(linkForm.id_cms) }}
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-12">
+                {{ form_row(linkForm.position) }}
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-12">
+                {{ form_row(linkForm.active) }}
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-between">
+              <a href="{{ path('evo_linkmanager_link_index') }}" class="btn btn-outline-secondary">
+                {{ 'Cancel'|trans({}, 'Admin.Actions') }}
+              </a>
+              <button class="btn btn-primary" type="submit">
+                {{ 'Save'|trans({}, 'Admin.Actions') }}
+              </button>
+            </div>
+          </div>
+          {{ form_end(linkForm) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if linkForm.vars.value.identifier is defined and linkForm.vars.value.identifier is not empty %}
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h3 class="card-header-title text-white">
+              <i class="material-icons">code</i>
+              {{ 'How to Use This Link in Templates'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+            </h3>
+          </div>
+          <div class="card-body">
+            <div class="alert alert-info">
+              <p>{{ 'You can use this link in your templates with the following code:'|trans({}, 'Modules.Evolinkmanager.Admin') }}</p>
+              <div class="bg-light p-3 my-3">
+                <pre><code>{literal}{get_evo_link_by_placement identifier='{/literal}{{ linkForm.vars.value.identifier }}{literal}'}{/literal}</code></pre>
+              </div>
+
+              <p>{{ 'Example usage:'|trans({}, 'Modules.Evolinkmanager.Admin') }}</p>
+              <div class="bg-light p-3 my-3">
+                <pre><code>{literal}<a href="{get_evo_link_by_placement identifier='{/literal}{{ linkForm.vars.value.identifier }}{literal}'}" class="btn btn-primary">{/literal}{{ linkForm.vars.value.name }}{literal}</a>{/literal}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

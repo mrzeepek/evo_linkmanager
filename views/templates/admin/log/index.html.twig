@@ -1,0 +1,28 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col">
+              <h3 class="card-header-title">
+                {{ 'Activity Logs'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+              </h3>
+            </div>
+            <div class="col text-right">
+              <a href="{{ path('evo_linkmanager_log_clear') }}" class="btn btn-outline-danger"
+                 onclick="return confirm('{{ 'Are you sure you want to clear all logs? This action cannot be undone.'|trans({}, 'Modules.Evolinkmanager.Admin') }}')">
+                <i class="material-icons">delete_sweep</i> {{ 'Clear Logs'|trans({}, 'Modules.Evolinkmanager.Admin') }}
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          {% include '@PrestaShop/Admin/Common/Grid/grid_panel.html.twig' with {'grid': logGrid} %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
